@@ -1,0 +1,98 @@
+:root {
+    /* Pure system font stack — zero web font downloads required */
+    --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --border-color: #e9ecef;
+    --text-muted: #6c757d;
+    --text-dark: #1a1a1a;
+}
+
+body {
+    font-family: var(--font-main);
+    color: var(--text-dark);
+    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Border Utilities */
+.border-bottom-subtle-custom {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.border-top-subtle-custom {
+    border-top: 1px solid var(--border-color);
+}
+
+/* Minimal Navigation Styling */
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-dark) !important;
+    font-size: 1.15rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text-muted) !important;
+    transition: color 0.15s ease;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+    .nav-link:hover,
+    .nav-link.active {
+        color: var(--text-dark) !important;
+    }
+
+/* Minimal Offline Buttons */
+.btn-minimal-ghost {
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 0.875rem;
+    border: none;
+    background: transparent;
+    padding: 0.45rem 0.9rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+    .btn-minimal-ghost:hover {
+        color: var(--text-dark);
+        opacity: 0.75;
+    }
+
+.btn-minimal-dark {
+    background-color: var(--text-dark);
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.875rem;
+    border: 1px solid var(--text-dark);
+    border-radius: 6px;
+    padding: 0.45rem 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.15s ease;
+}
+
+    .btn-minimal-dark:hover {
+        background-color: #333333;
+        color: #ffffff;
+        border-color: #333333;
+    }
+
+/* Footer Links */
+.footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.15s ease;
+}
+
+    .footer-link:hover {
+        color: var(--text-dark);
+    }
+
+.copyright-text {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
