@@ -1,0 +1,9 @@
+@{
+    var path = (Context.Request.Path.Value ?? "/").TrimEnd('/');
+    bool On(string p) => path.Equals(p, StringComparison.OrdinalIgnoreCase);
+}
+<nav class="tabs" aria-label="Kid sections">
+    <a class="tab@(On("/Me") ? " is-active" : "")" href="~/Me" aria-current="@(On("/Me") ? "page" : null)">My Finnies</a>
+    <a class="tab@(On("/Me/Task") ? " is-active" : "")" href="~/Me/Task" aria-current="@(On("/Me/Task") ? "page" : null)">Tasks</a>
+    <a class="tab@(On("/Me/Goal") ? " is-active" : "")" href="~/Me/Goal" aria-current="@(On("/Me/Goal") ? "page" : null)">Goals</a>
+</nav>

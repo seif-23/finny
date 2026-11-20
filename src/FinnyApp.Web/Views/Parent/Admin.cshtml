@@ -1,0 +1,113 @@
+@{
+    ViewData["Title"] = "Family setup";
+
+    // After POST /Admin the controller returns this view with the submitted model.
+    var childAdded = Model != null && ViewData.ModelState.IsValid;
+    var addedText = (Model == null || string.IsNullOrWhiteSpace(Model.Name))
+        ? "Child added."
+        : Model.Name + " was added.";
+}
+
+@model FinnyApp.Web.Models.ModelViews.AdminViewModel;
+
+<header class="page-head">
+    <h1>Family setup</h1>
+    <p class="lede">Add your children, then give them tasks to finish and goals to reach.</p>
+</header>
+
+<partial name="_ParentTabs" />
+
+<div class="cards">
+
+    <section class="card" aria-labelledby="child-title">
+        <div class="card-head">
+            <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg>
+            </span>
+            <div>
+                <h3 id="child-title">Add a child</h3>
+                <p>A name and a 4-digit PIN.</p>
+            </div>
+        </div>
+
+        @if (childAdded)
+        {
+            <p class="notice" role="status">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" /></svg>
+                @addedText
+            </p>
+        }
+
+        <form class="form" asp-controller="Parent" asp-action="Admin" method="post">
+            <div class="field">
+                <label for="child-name">Child's name</label>
+                <input asp-for="Name" id="child-name" class="input" type="text" value="@(childAdded ? "" : Model?.Name)" autocomplete="off" />
+            </div>
+            <div class="field">
+                <label for="child-pin">PIN</label>
+                <input asp-for="PIN" id="child-pin" class="input input-pin" type="password" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="••••" />
+                <span class="hint">Your child uses these 4 digits to open their page.</span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Add child</button>
+        </form>
+    </section>
+
+    <section class="card" aria-labelledby="task-title-h">
+        <div class="card-head">
+            <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4" /><path d="M8.5 12.5l2.5 2.5 4.5-5" /></svg>
+            </span>
+            <div>
+                <h3 id="task-title-h">Create a task</h3>
+                <p>Something your child can finish.</p>
+            </div>
+        </div>
+
+        <form class="form" asp-controller="Parent" asp-action="CreateTask" method="post">
+            <div class="field">
+                <label for="task-title">Task title</label>
+                <input asp-for="Title" id="task-title" class="input" type="text" autocomplete="off" />
+            </div>
+            <div class="field">
+                <label for="task-detail">Details</label>
+                <input asp-for="Detail" id="task-detail" class="input" type="text" autocomplete="off" />
+                <span class="hint">What does "done" look like?</span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Create task</button>
+        </form>
+    </section>
+
+    <section class="card" aria-labelledby="goal-title-h">
+        <div class="card-head">
+            <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M6 21V4" /><path d="M6 5h11l-2.5 4 2.5 4H6" /></svg>
+            </span>
+            <div>
+                <h3 id="goal-title-h">Create a goal</h3>
+                <p>Reached after enough tasks.</p>
+            </div>
+        </div>
+
+        <form class="form" asp-controller="Parent" asp-action="CreateGoal" method="post">
+            <div class="field">
+                <label for="goal-name">Goal name</label>
+                <input asp-for="Title" id="goal-name" class="input" type="text" autocomplete="off" />
+            </div>
+            <div class="field">
+                <label for="goal-amount">Tasks to finish</label>
+                <div class="stepper" data-stepper>
+                    <button type="button" class="step-btn" data-step="-1" aria-label="One fewer task">&minus;</button>
+                    <input asp-for="Amount" id="goal-amount" class="input" type="number" inputmode="numeric" />
+                    <button type="button" class="step-btn" data-step="1" aria-label="One more task">+</button>
+                </div>
+                <span asp-validation-for="Amount" class="field-error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Create goal</button>
+        </form>
+    </section>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

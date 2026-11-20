@@ -1,0 +1,5 @@
+/* Scoped styles for _Layout.cshtml only. Everything else lives in wwwroot/css/site.css */
+
+.site-footer {
+    margin-top: auto;
+}

@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "My Finnies";
+}
+
+<header class="page-head">
+    <h1>My Finnies</h1>
+    <p class="lede">Finish tasks, collect Finnies, reach your goals.</p>
+</header>
+
+<partial name="_ChildTabs" />
+
+<section class="balance" aria-label="Your Finnies">
+    <svg aria-hidden="true"><use href="#coin" /></svg>
+    <div>
+        <h2>Your Finnies</h2>
+        <p>The Finnies you earn will be counted here.</p>
+    </div>
+</section>
+
+<div class="tiles">
+    <a class="tile" href="~/Me/Task">
+        <h3>My tasks</h3>
+        <p>See what your parent asked you to do.</p>
+    </a>
+    <a class="tile" href="~/Me/Goal">
+        <h3>My goals</h3>
+        <p>See how close you are to each goal.</p>
+    </a>
+</div>
