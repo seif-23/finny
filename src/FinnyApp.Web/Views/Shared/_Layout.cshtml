@@ -1,0 +1,73 @@
+@{
+    var path = (Context.Request.Path.Value ?? "/").TrimEnd('/');
+    if (path == "") { path = "/"; }
+    bool Under(string p) => path.Equals(p, StringComparison.OrdinalIgnoreCase)
+                         || path.StartsWith(p + "/", StringComparison.OrdinalIgnoreCase);
+
+    var onHome = path == "/" || Under("/Global/Home");
+    var onParents = Under("/Admin") || Under("/Parent");
+    var onKids = Under("/Me") || Under("/Child");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1B2559" />
+    <title>@ViewData["Title"] - Finny</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='21' fill='%23FFC233' stroke='%231B2559' stroke-width='3'/%3E%3Cpath d='M19 33V15h11M19 23h8' fill='none' stroke='%231B2559' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FinnyApp.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    @* The Finny coin, defined once and reused with <use href="#coin" /> *@
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <symbol id="coin" viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="21" fill="#FFC233" stroke="#1B2559" stroke-width="3" />
+            <circle cx="24" cy="24" r="14.5" fill="none" stroke="#1B2559" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round" opacity=".45" />
+            <path d="M19 33V15h11M19 23h8" fill="none" stroke="#1B2559" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+        </symbol>
+    </svg>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="~/" aria-label="Finny home">
+                <svg aria-hidden="true"><use href="#coin" /></svg>
+                Finny
+            </a>
+
+            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="header-menu">Menu</button>
+
+            <div class="header-menu" id="header-menu">
+                <nav class="nav" aria-label="Main">
+                    <a class="nav-link@(onHome ? " is-active" : "")" href="~/" aria-current="@(onHome ? "page" : null)">Home</a>
+                    <a class="nav-link@(onParents ? " is-active" : "")" href="~/Admin" aria-current="@(onParents ? "page" : null)">For parents</a>
+                    <a class="nav-link@(onKids ? " is-active" : "")" href="~/Me" aria-current="@(onKids ? "page" : null)">For kids</a>
+                </nav>
+                <div class="header-actions">
+                    <a class="btn btn-sm" href="~/Login">Log in</a>
+                    <a class="btn btn-sm btn-primary" href="~/Join">Join Finny</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page" role="main">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span class="footer-brand"><svg aria-hidden="true"><use href="#coin" /></svg> Finny</span>
+            <span>Tasks, goals and Finnies for the whole family. &copy; 2026</span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="FinnyApp.csproj" />
+  <Project Path="src/FinnyApp.BLL/FinnyApp.BLL.csproj" />
+  <Project Path="src/FinnyApp.DAL/FinnyApp.DAL.csproj" />
+  <Project Path="src/FinnyApp.Web/FinnyApp.Web.csproj" />
 </Solution>

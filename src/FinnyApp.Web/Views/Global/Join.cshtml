@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Join Finny";
+}
+@model FinnyApp.Web.Models.ModelViews.JoinViewModel;
+
+<div class="auth">
+    <aside class="auth-aside">
+        <svg class="big-coin" aria-hidden="true"><use href="#coin" /></svg>
+        <h2>Start your family's jar</h2>
+        <p>Create a parent account, then add your children, tasks and goals.</p>
+    </aside>
+
+    <section class="auth-card">
+        <div>
+            <h1>Create your account</h1>
+            <p class="lede">It takes under a minute.</p>
+        </div>
+
+        <form class="form" asp-controller="Global" asp-action="Join" method="post">
+            <div class="field">
+                <label for="Name">Your name</label>
+                <input asp-for="Name" type="text" class="input" autocomplete="name" required />
+                <span asp-validation-for="Name" class="field-error"></span>
+            </div>
+
+            <div class="field">
+                <label for="Email">Email</label>
+                <input asp-for="Email" type="email" class="input" autocomplete="email" required />
+                <span asp-validation-for="Email" class="field-error"></span>
+            </div>
+
+            <div class="field">
+                <label for="Password">Password</label>
+                <div class="input-wrap">
+                    <input asp-for="Password" type="password" class="input" autocomplete="new-password" required />
+                    <button type="button" class="reveal" data-toggle-password aria-label="Show password" aria-pressed="false">Show</button>
+                </div>
+                <span asp-validation-for="Password" class="field-error"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Create account</button>
+        </form>
+
+        <p class="auth-alt">Already have an account? <a href="~/Login">Log in</a></p>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

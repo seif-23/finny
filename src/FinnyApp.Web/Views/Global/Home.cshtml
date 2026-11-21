@@ -1,0 +1,79 @@
+@{
+    ViewData["Title"] = "Chores become coins";
+}
+
+<section class="hero">
+    <div>
+        <h1>Chores become coins. Coins become goals.</h1>
+        <p class="lede">
+            Finny gives your family one place to set tasks and goals. Your kids finish a task, collect Finnies,
+            and watch the jar fill up.
+        </p>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="~/Join">Create your family</a>
+            <a class="btn" href="~/Login">Log in</a>
+        </div>
+    </div>
+
+    <div class="demo" data-demo data-goal="6" data-reward="5" aria-label="Interactive example">
+        <div class="demo-top">
+            <span class="chip" data-demo-chip>
+                <svg aria-hidden="true"><use href="#coin" /></svg>
+                <b data-demo-balance>0</b> Finnies
+            </span>
+            <span class="demo-note">Try it, this is a sample family</span>
+        </div>
+
+        <div class="demo-stage">
+            <svg class="jar" viewBox="0 0 220 250" aria-hidden="true" focusable="false">
+                <rect x="60" y="8" width="100" height="26" rx="9" fill="#1B2559" />
+                <path d="M54 44h112a14 14 0 0 1 14 14v150a30 30 0 0 1-30 30H70a30 30 0 0 1-30-30V58a14 14 0 0 1 14-14z"
+                      fill="#EAF0FF" stroke="#1B2559" stroke-width="4" />
+                <path d="M58 70v120" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".9" />
+                <g data-demo-coins></g>
+            </svg>
+
+            <div class="demo-side">
+                <div class="task">
+                    <p class="task-label">Today's task</p>
+                    <p class="task-title" data-demo-task>Make your bed</p>
+                    <p class="task-reward">+5 Finnies</p>
+                </div>
+
+                <button class="btn btn-primary" type="button" data-demo-done>Mark as done</button>
+
+                <div>
+                    <div class="progress" role="progressbar" aria-label="Goal progress" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" data-demo-progress>
+                        <span></span>
+                    </div>
+                    <p class="demo-status" style="margin-top:.5rem" role="status" data-demo-status>Goal: Scooter. 0 of 6 tasks done.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" aria-labelledby="how-title">
+    <h2 id="how-title">How it works</h2>
+    <ol class="steps">
+        <li>
+            <h3>Set it up</h3>
+            <p>Add your child with a 4-digit PIN, then write the tasks and goals for your family.</p>
+        </li>
+        <li>
+            <h3>Finish tasks</h3>
+            <p>Every task your child finishes earns Finnies, so effort turns into something they can see.</p>
+        </li>
+        <li>
+            <h3>Reach the goal</h3>
+            <p>A goal counts finished tasks. When the count is full, the goal is reached.</p>
+        </li>
+    </ol>
+</section>
+
+<section class="section">
+    <div class="cta">
+        <h2>Start your family's jar today.</h2>
+        <a class="btn btn-primary" href="~/Join">Create your family</a>
+    </div>
+</section>
