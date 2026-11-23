@@ -2,12 +2,14 @@
 using FinnyApp.BLL.Services;
 using FinnyApp.Web.ViewModels;
 
+// This Controller is for global actions of joining and logging users alike whether they are subusers or users. 
+
 namespace FinnyApp.Web.Controllers
 {
-    public class GlobalController : Controller
+    public class StoppageController : Controller
     {
         private readonly AuthService _authService;
-        public GlobalController(AuthService authService)
+        public StoppageController(AuthService authService)
         {
             _authService = authService;
         }

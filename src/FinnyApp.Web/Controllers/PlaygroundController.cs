@@ -2,7 +2,7 @@
 
 namespace FinnyApp.Web.Controllers
 {
-    public class SubUserController : Controller
+    public class PlaygroundController : Controller
     {
         [Route("/Me")]
         public IActionResult Me()

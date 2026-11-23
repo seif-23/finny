@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinnyApp.Web.Controllers
 {
-    public class UserController : Controller
+    public class DashboardController : Controller
     {
         private readonly ParentService _parentService;
-        public UserController(ParentService parentService)
+        public DashboardController(ParentService parentService)
         {
             _parentService = parentService;
         }
