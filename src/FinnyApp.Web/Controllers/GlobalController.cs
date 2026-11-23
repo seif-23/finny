@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FinnyApp.BLL.Services;
-using FinnyApp.Web.Models.ModelViews;
+using FinnyApp.Web.ViewModels;
 
-namespace FinnyApp.Web.Controllers.Pages
+namespace FinnyApp.Web.Controllers
 {
     public class GlobalController : Controller
     {
@@ -16,16 +16,13 @@ namespace FinnyApp.Web.Controllers.Pages
             return View();
         }
 
-        [Route("Join")]
-        [HttpGet]
+        [HttpGet("Join")]
         public IActionResult Join()
         {
             return View();
         }
 
-
-        [Route("/Join")]
-        [HttpPost]
+        [HttpPost("Join")]
         public async Task<IActionResult> Join(JoinViewModel model)
         {
             if (ModelState.IsValid)

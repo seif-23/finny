@@ -1,4 +1,4 @@
-﻿namespace FinnyApp.Web.Models.ModelViews
+﻿namespace FinnyApp.Web.ViewModels
 {
     public class LoginViewModel
     {

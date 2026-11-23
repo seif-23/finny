@@ -1,36 +1,40 @@
 using FinnyApp.DAL.Database;
-using FinnyApp.DAL.Entities;
+using FinnyApp.DAL.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinnyApp.BLL.Services
 {
     public class ParentService
     {
-        private readonly DContext _context;
-        public ParentService(DContext context)
+        private readonly DataContext _context;
+        public ParentService(DataContext context)
         {
             _context = context;
         }
 
-        public async Task CreateChild(string? name, string? pin)
+        public async Task<SubUser> CreateChild(string name, string pin, User user)
         {
-            var parent = await _context.ParentTable.FirstOrDefaultAsync(n => n.Email == "dal@mail.com");
+            if (_context.UserTable.Select(n => n.Email).FirstOrDefault() == user.Email)
+            {
+                var kid = new SubUser { Name = name, PIN = pin, User = user };
+                _context.SubUserTable.Add(kid);
+                await _context.SaveChangesAsync();
+                return kid;
+            }
 
-            var kid = new Child { Name = name, PIN = pin, Parent = parent };
-            _context.ChildTable.Add(kid);
-            await _context.SaveChangesAsync();
+            return null;
         }
 
         public async Task CreateTask(string? title, string? detail)
         {
             var parent = await _context.ParentTable.FirstOrDefaultAsync(n => n.Email == "dal@mail.com");
 
-            var task = new Tasks { Parent = parent, Title = title, Description = detail };
+            var task = new DAL.Entities.Task { Parent = parent, Title = title, Description = detail };
             _context.TaskTable.Add(task);
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateGoal(string? title, int amount)
+        public async System.Threading.Tasks.Task CreateGoal(string? title, int amount)
         {
             var parent = await _context.ParentTable.FirstOrDefaultAsync(n => n.Email == "dal@mail.com");
 

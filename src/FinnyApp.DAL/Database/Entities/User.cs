@@ -1,6 +1,6 @@
-﻿namespace FinnyApp.DAL.Entities
+﻿namespace FinnyApp.DAL.Database.Entities
 {
-    public class Parent
+    public class User
     {
         public int ID { get; set; }
         public required string Name { get; set; }

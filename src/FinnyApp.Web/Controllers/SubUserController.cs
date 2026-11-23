@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FinnyApp.Web.Controllers.Pages
+namespace FinnyApp.Web.Controllers
 {
-    public class ChildController : Controller
+    public class SubUserController : Controller
     {
         [Route("/Me")]
         public IActionResult Me()

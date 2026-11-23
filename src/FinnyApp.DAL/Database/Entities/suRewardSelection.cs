@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace FinnyApp.DAL.Entities
+namespace FinnyApp.DAL.Database.Entities
 {
-    public class ChildRewardSelection
+    public class suRewardSelection
     {
         public int ID { get; set; }
-        public int ChildID { get; set; }
+        public int SubUserID { get; set; }
         public int RewardID { get; set; }
         public bool Status { get; set; }
 
-        public required Child Child { get; set; }
+        public required SubUser SubUser { get; set; }
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public required Reward Reward { get; set; }
     }

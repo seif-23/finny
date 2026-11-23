@@ -1,21 +1,45 @@
 ﻿using FinnyApp.BLL.Services;
-using FinnyApp.Web.Models.ModelViews;
+using FinnyApp.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FinnyApp.Web.Controllers.Pages
+namespace FinnyApp.Web.Controllers
 {
-    public class ParentController : Controller
+    public class UserController : Controller
     {
         private readonly ParentService _parentService;
-        public ParentController(ParentService parentService)
+        public UserController(ParentService parentService)
         {
             _parentService = parentService;
         }
 
 
-        [Route("/Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Admin(AdminViewModel model)
+        //customized
+        [HttpGet("Join")]
+        public IActionResult Join()
+        {
+            return View();
+        }
+
+        [HttpPost("Join")]
+        public async Task<IActionResult> Join(JoinViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _authService.Join(model.Name, model.Email, model.Password);
+                return RedirectToAction("Dashboard", "User");
+            }
+            return View(model);
+        }
+
+
+        [HttpGet("/Dashboard")]
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        [HttpPost("/Dashboard")]
+        public async Task<IActionResult> Dashboard(AdminViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -25,12 +49,7 @@ namespace FinnyApp.Web.Controllers.Pages
             return View(model);
         }
 
-        [Route("/Admin")]
-        [HttpGet]
-        public IActionResult Admin()
-        {
-            return View();
-        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateTask(AdminViewModel model)

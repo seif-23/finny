@@ -1,16 +1,16 @@
 ﻿using Microsoft.SqlServer.Server;
 using System.Diagnostics.CodeAnalysis;
 
-namespace FinnyApp.DAL.Entities
+namespace FinnyApp.DAL.Database.Entities
 {
-    public class Child
+    public class SubUser
     {
         public int ID { get; set; }
-        public int ParentID { get; set; }
+        public int UserID { get; set; }
         [AllowNull]
         public string Name { get; set; }
         public required string PIN  { get; set; }
         public int Finnies {  get; set; }
-        public required Parent Parent { get; set; }
+        public required User User { get; set; }
     }
 }
