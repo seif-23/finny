@@ -11,7 +11,7 @@ namespace FinnyApp.BLL.Services
         {
             _context = context;
         }
-
+        /*
         public async Task Join(string name, string email, string password)
         {
             var user = new User { Email = email, Name = name, Password = password };
@@ -25,5 +25,6 @@ namespace FinnyApp.BLL.Services
 
             return !(users == null || users.Password != password);
         }
+        */
     }
 }

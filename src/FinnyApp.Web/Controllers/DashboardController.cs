@@ -6,81 +6,25 @@ namespace FinnyApp.Web.Controllers
 {
     public class DashboardController : Controller
     {
-        private readonly ParentService _parentService;
-        public DashboardController(ParentService parentService)
-        {
-            _parentService = parentService;
-        }
-
-
-        //customized
-        [HttpGet("Join")]
-        public IActionResult Join()
-        {
-            return View();
-        }
-
-        [HttpPost("Join")]
-        public async Task<IActionResult> Join(JoinViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _authService.Join(model.Name, model.Email, model.Password);
-                return RedirectToAction("Dashboard", "User");
-            }
-            return View(model);
-        }
-
-
-        [HttpGet("/Dashboard")]
         public IActionResult Dashboard()
         {
             return View();
         }
 
-        [HttpPost("/Dashboard")]
-        public async Task<IActionResult> Dashboard(AdminViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _parentService.CreateChild(model.Name, model.PIN);
-                return View(model);
-            }
-            return View(model);
-        }
-
-
-
-        [HttpPost]
-        public async Task<IActionResult> CreateTask(AdminViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _parentService.CreateTask(model.Title, model.Detail);
-                return RedirectToAction("Admin");
-            }
-            return RedirectToAction("Admin");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateGoal(AdminViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _parentService.CreateGoal(model.Title, model.Amount);
-                return RedirectToAction("Admin");
-            }
-            return RedirectToAction("Admin");
-        }
-
-        [Route("/Admin/Tasking")]
-        public IActionResult Tasking()
+        [HttpPost("/Dashboard/AddSub")]
+        public async Task<IActionResult> AddSubUser(AddSubUserViewModel model)
         {
             return View();
         }
 
-        [Route("/Admin/Goaling")]
-        public IActionResult Goaling()
+        [HttpPost("/Dashboard/AddTask")]
+        public async Task<IActionResult> AddTask(AddTaskViewModel model)
+        {
+            return View();
+        }
+
+        [HttpPost("/Dashboard/AddGoal")]
+        public async Task<IActionResult> AddGoal(AddGoalViewModel model)
         {
             return View();
         }

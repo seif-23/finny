@@ -8,52 +8,32 @@ namespace FinnyApp.Web.Controllers
 {
     public class StoppageController : Controller
     {
-        private readonly AuthService _authService;
-        public StoppageController(AuthService authService)
+        [Route("/")]
+        public IActionResult Landing()
         {
-            _authService = authService;
-        }
-        public IActionResult Home()
-        {
-            return View();
+            return View("Landing");
         }
 
-        [HttpGet("Join")]
-        public IActionResult Join()
+        [HttpGet("Stoppage")]
+        public IActionResult Stoppage()
         {
             return View();
         }
 
-        [HttpPost("Join")]
-        public async Task<IActionResult> Join(JoinViewModel model)
+        [HttpPost("Stoppage/Sign")]
+        public async Task<IActionResult> Sign(UserSignUpViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                await _authService.Join(model.Name, model.Email, model.Password);
-                return RedirectToAction("Admin", "Parent");
-            }
-            return View(model);
+            return View();
         }
 
-        [Route("/Login")]
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        [HttpPost("Stoppage/Login")]
+        public async Task<IActionResult> Login(UserLoginViewModel model)
         {
-            var success = await _authService.Login(model.Email, model.Password);
-
-            if (!success)
-            {
-                return Content("Wrong Password");
-            }
-            else
-            {
-                return RedirectToAction("Admin", "Parent");
-            }
+            return View();
         }
 
-        [Route("/Login")]
-        [HttpGet]
-        public IActionResult Login()
+        [HttpPost("Stoppage/SubLogin")]
+        public async Task<IActionResult> SubLogin(SubUserLoginViewModel model)
         {
             return View();
         }

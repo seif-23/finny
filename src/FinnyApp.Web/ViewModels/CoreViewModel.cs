@@ -13,4 +13,28 @@
     {
 
     }
+
+    public class AddSubUserViewModel
+    {
+
+    }
+
+    public class AddTaskViewModel
+    {
+
+    }
+    public class AddGoalViewModel
+    {
+
+    }
+
+    public class TaskViewModel
+    {
+
+    }
+
+    public class GoalViewModel
+    {
+
+    }
 }

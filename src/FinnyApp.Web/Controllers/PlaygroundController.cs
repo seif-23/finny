@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using FinnyApp.Web.ViewModels;
 
 namespace FinnyApp.Web.Controllers
 {
     public class PlaygroundController : Controller
     {
-        [Route("/Me")]
-        public IActionResult Me()
+        public IActionResult Playground()
         {
             return View();
         }
 
-        [Route("/Me/Task")]
-        public IActionResult Task()
+        [HttpPost("/Playground/Task")]
+        public IActionResult Task(TaskViewModel model)
         {
             return View();
         }
 
-        [Route("/Me/Goal")]
-        public IActionResult Goal()
+        [HttpPost("/Playground/Goal")]
+        public IActionResult Goal(GoalViewModel model)
         {
             return View();
         }

@@ -12,6 +12,7 @@ namespace FinnyApp.BLL.Services
             _context = context;
         }
 
+        /*
         public async Task<SubUser> CreateChild(string name, string pin, User user)
         {
             if (_context.UserTable.Select(n => n.Email).FirstOrDefault() == user.Email)
@@ -42,5 +43,6 @@ namespace FinnyApp.BLL.Services
             _context.GoalTable.Add(goal);
             await _context.SaveChangesAsync();
         }
+        */
     }
 }

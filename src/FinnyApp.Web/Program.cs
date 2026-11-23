@@ -1,6 +1,7 @@
 using FinnyApp.BLL.Services;
 using FinnyApp.DAL.Database;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,10 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(build
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ParentService>();
 
+builder.Services.Configure<RazorViewEngineOptions>(options =>
+{
+    options.ViewLocationFormats.Add("/Views/global/{0}.cshtml");
+});
 
 var app = builder.Build();
 
