@@ -2,16 +2,16 @@
 
 #nullable disable
 
-namespace FinnyApp.DAL.Migrations
+namespace FinnyApp.DAL.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstShot : Migration
+    public partial class FirstMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ParentTable",
+                name: "UserTable",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -22,29 +22,7 @@ namespace FinnyApp.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ParentTable", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ChildTable",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentID = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PIN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Finnies = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChildTable", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_ChildTable_ParentTable_ParentID",
-                        column: x => x.ParentID,
-                        principalTable: "ParentTable",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_UserTable", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,7 +31,7 @@ namespace FinnyApp.DAL.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TaskAmountToFinish = table.Column<int>(type: "int", nullable: false)
                 },
@@ -61,9 +39,9 @@ namespace FinnyApp.DAL.Migrations
                 {
                     table.PrimaryKey("PK_GoalTable", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_GoalTable_ParentTable_ParentID",
-                        column: x => x.ParentID,
-                        principalTable: "ParentTable",
+                        name: "FK_GoalTable_UserTable_UserID",
+                        column: x => x.UserID,
+                        principalTable: "UserTable",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -74,7 +52,7 @@ namespace FinnyApp.DAL.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FinniesCost = table.Column<int>(type: "int", nullable: false)
                 },
@@ -82,9 +60,31 @@ namespace FinnyApp.DAL.Migrations
                 {
                     table.PrimaryKey("PK_RewardTable", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_RewardTable_ParentTable_ParentID",
-                        column: x => x.ParentID,
-                        principalTable: "ParentTable",
+                        name: "FK_RewardTable_UserTable_UserID",
+                        column: x => x.UserID,
+                        principalTable: "UserTable",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubUserTable",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PIN = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Finnies = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubUserTable", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_SubUserTable_UserTable_UserID",
+                        column: x => x.UserID,
+                        principalTable: "UserTable",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -95,7 +95,7 @@ namespace FinnyApp.DAL.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RewardAmount = table.Column<int>(type: "int", nullable: false)
@@ -104,88 +104,88 @@ namespace FinnyApp.DAL.Migrations
                 {
                     table.PrimaryKey("PK_TaskTable", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_TaskTable_ParentTable_ParentID",
-                        column: x => x.ParentID,
-                        principalTable: "ParentTable",
+                        name: "FK_TaskTable_UserTable_UserID",
+                        column: x => x.UserID,
+                        principalTable: "UserTable",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChildGoalProgressTable",
+                name: "suGoalProgressTable",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ChildID = table.Column<int>(type: "int", nullable: false),
+                    SubUserID = table.Column<int>(type: "int", nullable: false),
                     GoalID = table.Column<int>(type: "int", nullable: false),
                     TasksProgress = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChildGoalProgressTable", x => x.ID);
+                    table.PrimaryKey("PK_suGoalProgressTable", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ChildGoalProgressTable_ChildTable_ChildID",
-                        column: x => x.ChildID,
-                        principalTable: "ChildTable",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ChildGoalProgressTable_GoalTable_GoalID",
+                        name: "FK_suGoalProgressTable_GoalTable_GoalID",
                         column: x => x.GoalID,
                         principalTable: "GoalTable",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_suGoalProgressTable_SubUserTable_SubUserID",
+                        column: x => x.SubUserID,
+                        principalTable: "SubUserTable",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChildRewardSelectionTable",
+                name: "suRewardSelectionTable",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ChildID = table.Column<int>(type: "int", nullable: false),
+                    SubUserID = table.Column<int>(type: "int", nullable: false),
                     RewardID = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChildRewardSelectionTable", x => x.ID);
+                    table.PrimaryKey("PK_suRewardSelectionTable", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ChildRewardSelectionTable_ChildTable_ChildID",
-                        column: x => x.ChildID,
-                        principalTable: "ChildTable",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ChildRewardSelectionTable_RewardTable_RewardID",
+                        name: "FK_suRewardSelectionTable_RewardTable_RewardID",
                         column: x => x.RewardID,
                         principalTable: "RewardTable",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_suRewardSelectionTable_SubUserTable_SubUserID",
+                        column: x => x.SubUserID,
+                        principalTable: "SubUserTable",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChildTaskProgressTable",
+                name: "suTaskProgressTable",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TaskID = table.Column<int>(type: "int", nullable: false),
-                    ChildID = table.Column<int>(type: "int", nullable: false),
+                    SubUserID = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChildTaskProgressTable", x => x.ID);
+                    table.PrimaryKey("PK_suTaskProgressTable", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ChildTaskProgressTable_ChildTable_ChildID",
-                        column: x => x.ChildID,
-                        principalTable: "ChildTable",
+                        name: "FK_suTaskProgressTable_SubUserTable_SubUserID",
+                        column: x => x.SubUserID,
+                        principalTable: "SubUserTable",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ChildTaskProgressTable_TaskTable_TaskID",
+                        name: "FK_suTaskProgressTable_TaskTable_TaskID",
                         column: x => x.TaskID,
                         principalTable: "TaskTable",
                         principalColumn: "ID",
@@ -193,67 +193,67 @@ namespace FinnyApp.DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildGoalProgressTable_ChildID",
-                table: "ChildGoalProgressTable",
-                column: "ChildID");
+                name: "IX_GoalTable_UserID",
+                table: "GoalTable",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildGoalProgressTable_GoalID",
-                table: "ChildGoalProgressTable",
+                name: "IX_RewardTable_UserID",
+                table: "RewardTable",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubUserTable_UserID",
+                table: "SubUserTable",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_suGoalProgressTable_GoalID",
+                table: "suGoalProgressTable",
                 column: "GoalID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildRewardSelectionTable_ChildID",
-                table: "ChildRewardSelectionTable",
-                column: "ChildID");
+                name: "IX_suGoalProgressTable_SubUserID",
+                table: "suGoalProgressTable",
+                column: "SubUserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildRewardSelectionTable_RewardID",
-                table: "ChildRewardSelectionTable",
+                name: "IX_suRewardSelectionTable_RewardID",
+                table: "suRewardSelectionTable",
                 column: "RewardID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildTable_ParentID",
-                table: "ChildTable",
-                column: "ParentID");
+                name: "IX_suRewardSelectionTable_SubUserID",
+                table: "suRewardSelectionTable",
+                column: "SubUserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildTaskProgressTable_ChildID",
-                table: "ChildTaskProgressTable",
-                column: "ChildID");
+                name: "IX_suTaskProgressTable_SubUserID",
+                table: "suTaskProgressTable",
+                column: "SubUserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildTaskProgressTable_TaskID",
-                table: "ChildTaskProgressTable",
+                name: "IX_suTaskProgressTable_TaskID",
+                table: "suTaskProgressTable",
                 column: "TaskID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GoalTable_ParentID",
-                table: "GoalTable",
-                column: "ParentID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RewardTable_ParentID",
-                table: "RewardTable",
-                column: "ParentID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TaskTable_ParentID",
+                name: "IX_TaskTable_UserID",
                 table: "TaskTable",
-                column: "ParentID");
+                column: "UserID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ChildGoalProgressTable");
+                name: "suGoalProgressTable");
 
             migrationBuilder.DropTable(
-                name: "ChildRewardSelectionTable");
+                name: "suRewardSelectionTable");
 
             migrationBuilder.DropTable(
-                name: "ChildTaskProgressTable");
+                name: "suTaskProgressTable");
 
             migrationBuilder.DropTable(
                 name: "GoalTable");
@@ -262,13 +262,13 @@ namespace FinnyApp.DAL.Migrations
                 name: "RewardTable");
 
             migrationBuilder.DropTable(
-                name: "ChildTable");
+                name: "SubUserTable");
 
             migrationBuilder.DropTable(
                 name: "TaskTable");
 
             migrationBuilder.DropTable(
-                name: "ParentTable");
+                name: "UserTable");
         }
     }
 }

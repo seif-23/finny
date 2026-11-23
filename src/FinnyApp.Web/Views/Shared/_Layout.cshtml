@@ -41,13 +41,13 @@
 
             <div class="header-menu" id="header-menu">
                 <nav class="nav" aria-label="Main">
-                    <a class="nav-link@(onHome ? " is-active" : "")" href="~/" aria-current="@(onHome ? "page" : null)">Home</a>
-                    <a class="nav-link@(onParents ? " is-active" : "")" href="~/Admin" aria-current="@(onParents ? "page" : null)">For parents</a>
-                    <a class="nav-link@(onKids ? " is-active" : "")" href="~/Me" aria-current="@(onKids ? "page" : null)">For kids</a>
+                    <a class="nav-link@(onHome ? " is-active" : "")" asp-action="Landing" asp-controller="Stoppage" aria-current="@(onHome ? "page" : null)">Home</a>
+                    <a class="nav-link@(onParents ? " is-active" : "")" asp-action="Dashboard" asp-controller="Dashboard" aria-current="@(onParents ? "page" : null)">For parents</a>
+                    <a class="nav-link@(onKids ? " is-active" : "")" asp-action="Playground" asp-controller="Playground" aria-current="@(onKids ? "page" : null)">For kids</a>
                 </nav>
                 <div class="header-actions">
-                    <a class="btn btn-sm" href="~/Login">Log in</a>
-                    <a class="btn btn-sm btn-primary" href="~/Join">Join Finny</a>
+                    <a class="btn btn-sm" asp-action="Stoppage" asp-controller="Stoppage">Log in</a>
+                    <a class="btn btn-sm btn-primary" asp-action="Stoppage" asp-controller="Stoppage">Join Finny</a>
                 </div>
             </div>
         </div>
