@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace FinnyApp.Web.Controllers
 {
@@ -42,10 +43,10 @@ namespace FinnyApp.Web.Controllers
                     new(ClaimTypes.Email, user.Email)
                 };
 
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var identity = new ClaimsIdentity(claims, "FinnyUserCookie");
                 var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                await HttpContext.SignInAsync("FinnyUserCookie", principal);
 
                 return Content("Login successful");
             }
@@ -77,11 +78,37 @@ namespace FinnyApp.Web.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "FinnyUserCookie")]
         [HttpGet("/dashboard")]
         public IActionResult Dashboard()
         {
             return View();
+        }
+
+        [Authorize(AuthenticationSchemes = "FinnyUserCookie")]
+        [HttpPost("/dashboard")]
+        public async Task<IActionResult> Dashboard(CreateSubUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = await HttpContext.AuthenticateAsync("FinnyUserCookie");
+
+                if (userId.Succeeded)
+                {
+                    var ID = userId.Principal?.FindFirst(ClaimTypes.Name)?.Value;
+                    var user = _context.UserTable.FirstOrDefault(u => u.ID.ToString() == ID);
+                    var subUser = new SubUser
+                    {
+                        User = user,
+                        Name = model.Name,
+                        PIN = model.PIN,
+                    };
+                    _context.SubUserTable.Add(subUser);
+                    _context.SaveChanges();
+                    return Content("SubUser created successfully");
+                }
+            }
+            return View(model);
         }
     }
 }

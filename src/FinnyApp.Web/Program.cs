@@ -13,13 +13,20 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(build
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ParentService>();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+builder.Services.AddAuthentication(options =>
     {
-        options.Cookie.Name = "FinCookie";
+        options.DefaultScheme = "FinnyUserCookie";
+        options.DefaultChallengeScheme = "FinnyUserCookie";
+    })
+    .AddCookie("FinnyUserCookie", options =>
+    {
+        options.Cookie.Name = "FinnyUserCookie";
         options.LoginPath = "/Login";
-        options.LogoutPath = "/Logout";
-        options.AccessDeniedPath = "/AccessDenied";
+    })
+    .AddCookie("FinnySubUserCookie", options =>
+    {
+        options.Cookie.Name = "FinnySubUserCookie";
+        options.LoginPath = "/SubLogin";
     });
 builder.Services.AddAuthorization();
 
