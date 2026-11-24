@@ -31,5 +31,11 @@ namespace FinnyApp.Web.Controllers
             }
             return View();
         }
+
+        [HttpGet("/Playground")]
+        public IActionResult Playground()
+        {
+            return View();
+        }
     }
 }

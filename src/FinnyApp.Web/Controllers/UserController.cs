@@ -2,6 +2,11 @@
 using FinnyApp.DAL.Database.Entities;
 using FinnyApp.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinnyApp.Web.Controllers
 {
@@ -20,15 +25,31 @@ namespace FinnyApp.Web.Controllers
         }
 
         [HttpPost("/login")]
-        public IActionResult Login(UserLoginViewModel model)
+        public async Task<IActionResult> Login(UserLoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                if (_context.UserTable.Any(u => u.Email == model.Email && u.Password == model.Password))
-                {
-                    return Content("Login successful");
-                }
+                return View(model);
             }
+
+            var user = await _context.UserTable.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+
+            if (user != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new(ClaimTypes.Name, user.ID.ToString()),
+                    new(ClaimTypes.Email, user.Email)
+                };
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                return Content("Login successful");
+            }
+            ModelState.AddModelError(string.Empty, "No User Found!");
             return View();
         }
 
@@ -56,6 +77,7 @@ namespace FinnyApp.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpGet("/dashboard")]
         public IActionResult Dashboard()
         {
