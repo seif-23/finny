@@ -9,8 +9,8 @@ namespace FinnyApp.DAL.Entities
         public int ParentID { get; set; }
         [AllowNull]
         public string Name { get; set; }
-        public required string PIN  { get; set; }
-        public int Finnies {  get; set; }
+        public required string PIN { get; set; }
+        public int Finnies { get; set; }
         public required Parent Parent { get; set; }
     }
 }

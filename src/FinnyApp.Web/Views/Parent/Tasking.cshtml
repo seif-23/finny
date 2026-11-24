@@ -1,17 +1,151 @@
+@model IEnumerable<FinnyApp.DAL.Entities.ChildTaskProgress>
+
 @{
     ViewData["Title"] = "Tasks";
+    var children = ViewBag.Children as IEnumerable<FinnyApp.DAL.Entities.Child>;
 }
 
 <header class="page-head">
     <h1>Tasks</h1>
-    <p class="lede">Every task you create for your children.</p>
+    <p class="lede">Manage the tasks you create for your children.</p>
 </header>
 
 <partial name="_ParentTabs" />
 
-<div class="empty">
-    <svg aria-hidden="true"><use href="#coin" /></svg>
-    <h2>Your task list will show up here</h2>
-    <p>This page will list the tasks you've created. You can create new ones from Family setup.</p>
-    <a class="btn btn-primary" href="~/Admin">Create a task</a>
-</div>
+<section class="task-create">
+    <h2>Create a new task</h2>
+
+    @if (children != null && children.Any())
+    {
+        <form asp-controller="Parent" asp-action="CreateTask" method="post">
+            <div>
+                <label for="Title">Task title</label>
+                <input type="text" id="Title" name="Title" required />
+            </div>
+
+            <div>
+                <label for="Detail">Description</label>
+                <textarea id="Detail" name="Detail" required></textarea>
+            </div>
+
+            <div>
+                <label for="ChildId">Assign to child</label>
+                <select id="ChildId" name="ChildId" required>
+                    <option value="">Select a child</option>
+                    @foreach (var child in children)
+                    {
+                        <option value="@child.ID">@child.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label for="RewardAmount">Reward amount (Finnies)</label>
+                <input type="number" id="RewardAmount" name="RewardAmount" min="0" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Create task
+            </button>
+        </form>
+    }
+    else
+    {
+        <div class="empty">
+            <h3>No children found</h3>
+            <p>Add a child from Family setup before creating a task.</p>
+            <a class="btn btn-primary" asp-controller="Parent" asp-action="Admin">
+                Family setup
+            </a>
+        </div>
+    }
+</section>
+
+<section class="task-list">
+    <h2>Your tasks</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var progress in Model)
+        {
+            <article class="task-card">
+                <h3>@progress.Task.Title</h3>
+
+                <p>@progress.Task.Description</p>
+                <p>Child: @progress.Child.Name</p>
+                <p>Reward: @progress.Task.RewardAmount Finnies</p>
+                <p>Status: @(progress.Status ? "Completed" : "Pending")</p>
+
+                <details>
+                    <summary>Edit task</summary>
+
+                    <form asp-controller="Parent" asp-action="UpdateTask" method="post">
+                        <input type="hidden" name="TaskId" value="@progress.TaskID" />
+
+                        <div>
+                            <label>Task title</label>
+                            <input type="text" name="Title"
+                                   value="@progress.Task.Title" required />
+                        </div>
+
+                        <div>
+                            <label>Description</label>
+                            <textarea name="Detail" required>@progress.Task.Description</textarea>
+                        </div>
+
+                        <div>
+                            <label>Assign to child</label>
+                            <select name="ChildId" required>
+                                @if (children != null)
+                                {
+                                    foreach (var child in children)
+                                    {
+                                        if (child.ID == progress.ChildID)
+                                        {
+                                            <option value="@child.ID" selected>
+                                                @child.Name
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@child.ID">
+                                                @child.Name
+                                            </option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Reward amount (Finnies)</label>
+                            <input type="number" name="RewardAmount"
+                                   value="@progress.Task.RewardAmount"
+                                   min="0" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Save changes
+                        </button>
+                    </form>
+                </details>
+
+                <form asp-controller="Parent" asp-action="DeleteTask" method="post">
+                    <input type="hidden" name="taskId" value="@progress.TaskID" />
+
+                    <button type="submit" class="btn"
+                            onclick="return confirm('Are you sure you want to delete this task?')">
+                        Delete task
+                    </button>
+                </form>
+            </article>
+        }
+    }
+    else
+    {
+        <div class="empty">
+            <h2>No tasks yet</h2>
+            <p>Create your first task using the form above.</p>
+        </div>
+    }
+</section>
