@@ -2,15 +2,19 @@
 using FinnyApp.DAL.Database.Entities;
 using FinnyApp.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace FinnyApp.Web.Controllers
 {
     public class UserController : Controller
     {
         private readonly DataContext _context;
-        public UserController(DataContext context)
+        private readonly IPasswordHasher<User> _hasher;
+
+        public UserController(DataContext context, IPasswordHasher<User> hasher)
         {
             _context = context;
+            _hasher = hasher;
         }
 
         [HttpGet("/login")]
@@ -22,14 +26,22 @@ namespace FinnyApp.Web.Controllers
         [HttpPost("/login")]
         public IActionResult Login(UserLoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = _context.UserTable.FirstOrDefault(u => u.Email == model.Email);
+
+            if (user != null)
             {
-                if (_context.UserTable.Any(u => u.Email == model.Email && u.Password == model.Password))
+                var result = _hasher.VerifyHashedPassword(user, user.Password, model.Password);
+                if (result != PasswordVerificationResult.Failed)
                 {
                     return Content("Login successful");
                 }
             }
-            return View();
+
+            ModelState.AddModelError("", "الإيميل أو الباسوورد غلط");
+            return View(model);
         }
 
         [HttpGet("/signup")]
@@ -41,19 +53,21 @@ namespace FinnyApp.Web.Controllers
         [HttpPost("/signup")]
         public IActionResult SignUp(UserSignUpViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            if (_context.UserTable.Any(u => u.Email == model.Email))
             {
-                var user = new User
-                {
-                    Name = model.Name,
-                    Email = model.Email,
-                    Password = model.Password
-                };
-                _context.UserTable.Add(user);
-                _context.SaveChanges();
-                return Content("Sign up successful");
+                ModelState.AddModelError("Email", "الإيميل مستخدم بالفعل");
+                return View(model);
             }
-            return View(model);
+
+            var user = new User { Name = model.Name, Email = model.Email, Password = string.Empty };
+            user.Password = _hasher.HashPassword(user, model.Password);
+
+            _context.UserTable.Add(user);
+            _context.SaveChanges();
+            return Content("Sign up successful");
         }
 
         [HttpGet("/dashboard")]

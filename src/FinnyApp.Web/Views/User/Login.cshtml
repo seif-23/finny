@@ -7,10 +7,20 @@
 @model FinnyApp.Web.ViewModels.UserLoginViewModel;
 
 <form asp-action="Login" asp-controller="User" method="post">
-    <label>Email</label>
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <label asp-for="Email"></label>
     <input type="email" asp-for="Email" />
+    <span asp-validation-for="Email"></span>
     <br />
-    <label>Password</label>
+
+    <label asp-for="Password"></label>
     <input type="password" asp-for="Password" />
+    <span asp-validation-for="Password"></span>
+
     <button type="submit">Sign In</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
