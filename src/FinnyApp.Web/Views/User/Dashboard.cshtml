@@ -1,0 +1,17 @@
+﻿@*
+    This is for User only where they can add tasks, goals, SubUsers and manage all from it. one page only for all functions.
+*@
+@{
+}
+
+
+@model FinnyApp.Web.ViewModels.CreateSubUserViewModel;
+
+<form asp-action="Dashboard" asp-controller="User" method="post">
+    <label>Name</label>
+    <input type="text" asp-for="Name" />
+    <br />
+    <label>PIN</label>
+    <input type="password" asp-for="PIN" />
+    <button type="submit">Sign In</button>
+</form>

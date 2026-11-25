@@ -1,14 +1,41 @@
 using FinnyApp.BLL.Services;
 using FinnyApp.DAL.Database;
+using FinnyApp.DAL.Database.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<DContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ParentService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = "FinnyUserCookie";
+        options.DefaultChallengeScheme = "FinnyUserCookie";
+    })
+    .AddCookie("FinnyUserCookie", options =>
+    {
+        options.Cookie.Name = "FinnyUserCookie";
+        options.LoginPath = "/Login";
+    })
+    .AddCookie("FinnySubUserCookie", options =>
+    {
+        options.Cookie.Name = "FinnySubUserCookie";
+        options.LoginPath = "/SubLogin";
+    });
+builder.Services.AddAuthorization();
+
+builder.Services.Configure<RazorViewEngineOptions>(options =>
+{
+    options.ViewLocationFormats.Add("/Views/global/{0}.cshtml");
+});
 
 var app = builder.Build();
 
@@ -23,6 +50,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
