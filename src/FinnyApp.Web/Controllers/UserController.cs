@@ -2,6 +2,7 @@
 using FinnyApp.DAL.Database.Entities;
 using FinnyApp.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,9 +15,12 @@ namespace FinnyApp.Web.Controllers
     public class UserController : Controller
     {
         private readonly DataContext _context;
-        public UserController(DataContext context)
+        private readonly IPasswordHasher<User> _hasher;
+
+        public UserController(DataContext context, IPasswordHasher<User> hasher)
         {
             _context = context;
+            _hasher = hasher;
         }
 
         [HttpGet("/login")]
@@ -33,22 +37,26 @@ namespace FinnyApp.Web.Controllers
                 return View(model);
             }
 
-            var user = await _context.UserTable.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+            var user = await _context.UserTable.FirstOrDefaultAsync(u => u.Email == model.Email);
 
             if (user != null)
             {
-                var claims = new List<Claim>
+                var result = _hasher.VerifyHashedPassword(user, user.Password, model.Password);
+                if (result != PasswordVerificationResult.Failed)
                 {
-                    new(ClaimTypes.Name, user.ID.ToString()),
-                    new(ClaimTypes.Email, user.Email)
-                };
+                    var claims = new List<Claim>
+                    {
+                        new(ClaimTypes.Name, user.ID.ToString()),
+                        new(ClaimTypes.Email, user.Email)
+                    };
 
-                var identity = new ClaimsIdentity(claims, "FinnyUserCookie");
-                var principal = new ClaimsPrincipal(identity);
+                    var identity = new ClaimsIdentity(claims, "FinnyUserCookie");
+                    var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync("FinnyUserCookie", principal);
+                    await HttpContext.SignInAsync("FinnyUserCookie", principal);
 
-                return Content("Login successful");
+                    return Content("Login successful");
+                }
             }
             ModelState.AddModelError(string.Empty, "No User Found!");
             return View();
@@ -63,19 +71,21 @@ namespace FinnyApp.Web.Controllers
         [HttpPost("/signup")]
         public IActionResult SignUp(UserSignUpViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            if (_context.UserTable.Any(u => u.Email == model.Email))
             {
-                var user = new User
-                {
-                    Name = model.Name,
-                    Email = model.Email,
-                    Password = model.Password
-                };
-                _context.UserTable.Add(user);
-                _context.SaveChanges();
-                return Content("Sign up successful");
+                ModelState.AddModelError("Email", "الإيميل مستخدم بالفعل");
+                return View(model);
             }
-            return View(model);
+
+            var user = new User { Name = model.Name, Email = model.Email, Password = string.Empty };
+            user.Password = _hasher.HashPassword(user, model.Password);
+
+            _context.UserTable.Add(user);
+            _context.SaveChanges();
+            return Content("Sign up successful");
         }
 
         [Authorize(AuthenticationSchemes = "FinnyUserCookie")]

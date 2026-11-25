@@ -1,4 +1,6 @@
-﻿namespace FinnyApp.Web.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FinnyApp.Web.ViewModels
 {
     public class UserLoginViewModel
     {

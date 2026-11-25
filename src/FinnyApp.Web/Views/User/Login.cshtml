@@ -9,10 +9,18 @@
 <form asp-action="Login" asp-controller="User" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <br />
-    <label>Email</label>
+    <label asp-for="Email">Email</label>
     <input type="email" asp-for="Email" />
+    <span asp-validation-for="Email"></span>
     <br />
-    <label>Password</label>
+
+    <label asp-for="Password"></label>
     <input type="password" asp-for="Password" />
+    <span asp-validation-for="Password"></span>
+
     <button type="submit">Sign In</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
