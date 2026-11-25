@@ -1,6 +1,7 @@
 using FinnyApp.BLL.Services;
 using FinnyApp.DAL.Database;
 using FinnyApp.DAL.Database.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,23 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(build
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ParentService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = "FinnyUserCookie";
+        options.DefaultChallengeScheme = "FinnyUserCookie";
+    })
+    .AddCookie("FinnyUserCookie", options =>
+    {
+        options.Cookie.Name = "FinnyUserCookie";
+        options.LoginPath = "/Login";
+    })
+    .AddCookie("FinnySubUserCookie", options =>
+    {
+        options.Cookie.Name = "FinnySubUserCookie";
+        options.LoginPath = "/SubLogin";
+    });
+builder.Services.AddAuthorization();
 
 builder.Services.Configure<RazorViewEngineOptions>(options =>
 {
@@ -32,6 +50,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

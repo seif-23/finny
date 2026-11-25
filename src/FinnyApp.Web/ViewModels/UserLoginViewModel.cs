@@ -4,11 +4,9 @@ namespace FinnyApp.Web.ViewModels
 {
     public class UserLoginViewModel
     {
-        [Required(ErrorMessage = "الإيميل مطلوب")]
-        [EmailAddress(ErrorMessage = "صيغة الإيميل غلط")]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = "الباسوورد مطلوب")]
-        public string Password { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
+        public bool RememberMe { get; set; }
+        public string? ReturnUrl { get; set; }
     }
 }

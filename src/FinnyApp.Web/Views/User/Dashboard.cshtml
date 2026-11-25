@@ -5,13 +5,13 @@
 }
 
 
-@model FinnyApp.Web.ViewModels.UserLoginViewModel;
+@model FinnyApp.Web.ViewModels.CreateSubUserViewModel;
 
-<form asp-action="Login" asp-controller="User" method="post">
-    <label>Email</label>
-    <input type="email" asp-for="Email" />
+<form asp-action="Dashboard" asp-controller="User" method="post">
+    <label>Name</label>
+    <input type="text" asp-for="Name" />
     <br />
-    <label>Password</label>
-    <input type="password" asp-for="Password" />
+    <label>PIN</label>
+    <input type="password" asp-for="PIN" />
     <button type="submit">Sign In</button>
 </form>

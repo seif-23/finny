@@ -3,3 +3,16 @@
 *@
 @{
 }
+
+@model FinnyApp.Web.ViewModels.SubUserLoginViewModel;
+
+<form asp-action="SubLogin" asp-controller="SubUser" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <label>Email</label>
+    <input type="email" asp-for="Email" />
+    <br />
+    <label>PIN</label>
+    <input type="password" asp-for="PIN" />
+    <button type="submit">Sign In</button>
+</form>
