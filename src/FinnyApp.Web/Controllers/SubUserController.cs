@@ -54,9 +54,21 @@ namespace FinnyApp.Web.Controllers
 
         [Authorize(AuthenticationSchemes = "FinnySubUserCookie")]
         [HttpGet("/Playground")]
-        public IActionResult Playground()
+        public async Task<IActionResult> Playground()
         {
-            return View();
+            var tasks = await _context.TaskTable.ToListAsync();
+            return View(tasks);
+        }
+
+        public async Task<IActionResult> DeleteTask(int taskId)
+        {
+            var task = await _context.TaskTable.FindAsync(taskId);
+            if (task != null)
+            {
+                _context.TaskTable.Remove(task);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Playground");
         }
     }
 }

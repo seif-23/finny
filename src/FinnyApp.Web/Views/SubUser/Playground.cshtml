@@ -1,6 +1,18 @@
-﻿@*
-    This page is for SubUsers only where they can do all things in one page without any unnecessary stuff.
-    all functions and method should work here for SubUsers.
-*@
+﻿
 @{
+}
+@model List<FinnyApp.DAL.Database.Entities.Task>;
+
+<p>Hello, SubUser!</p>
+<p>Welcome to your personalized dashboard!</p>
+
+@foreach (var task in Model)
+{
+    <div>
+        <h3>@task.Title</h3>
+        <p>@task.Description</p>
+        <form asp-action="DeleteTask" asp-controller="SubUser" method="post" asp-route-taskId="@task.ID">
+            <button type="submit">Delete Task</button>
+        </form>
+    </div>
 }
