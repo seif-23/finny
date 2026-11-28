@@ -96,8 +96,8 @@ namespace FinnyApp.Web.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "FinnyUserCookie")]
-        [HttpPost("/dashboard")]
-        public async Task<IActionResult> Dashboard(CreateSubUserViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> CreateSubUser(DashboardViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -110,12 +110,63 @@ namespace FinnyApp.Web.Controllers
                     var subUser = new SubUser
                     {
                         User = user,
-                        Name = model.Name,
-                        PIN = model.PIN,
+                        Name = model.CreateSubUser.Name,
+                        PIN = model.CreateSubUser.PIN,
                     };
                     _context.SubUserTable.Add(subUser);
                     _context.SaveChanges();
                     return Content("SubUser created successfully");
+                }
+            }
+            return View(model);
+        }
+
+        [Authorize(AuthenticationSchemes = "FinnyUserCookie")]
+        [HttpPost]
+        public async Task<IActionResult> CreateSubUserTask(DashboardViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = await HttpContext.AuthenticateAsync("FinnyUserCookie");
+
+                if (userId.Succeeded)
+                {
+                    var ID = userId.Principal?.FindFirst(ClaimTypes.Name)?.Value;
+                    var user = _context.UserTable.FirstOrDefault(u => u.ID.ToString() == ID);
+                    var task = new DAL.Database.Entities.Task
+                    {
+                        User = user,
+                        Title = model.CreateTask.Title,
+                        Description = model.CreateTask.Description,
+                    };
+                    _context.TaskTable.Add(task);
+                    _context.SaveChanges();
+                    return Content("Task created successfully");
+                }
+            }
+            return View(model);
+        }
+
+        [Authorize(AuthenticationSchemes = "FinnyUserCookie")]
+        [HttpPost]
+        public async Task<IActionResult> CreateSubUserGoal(DashboardViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = await HttpContext.AuthenticateAsync("FinnyUserCookie");
+
+                if (userId.Succeeded)
+                {
+                    var ID = userId.Principal?.FindFirst(ClaimTypes.Name)?.Value;
+                    var user = _context.UserTable.FirstOrDefault(u => u.ID.ToString() == ID);
+                    var goal = new DAL.Database.Entities.Goal
+                    {
+                        User = user,
+                        Title = model.CreateGoal.Title
+                    };
+                    _context.GoalTable.Add(goal);
+                    _context.SaveChanges();
+                    return Content("Goal created successfully");
                 }
             }
             return View(model);

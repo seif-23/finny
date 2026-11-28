@@ -5,13 +5,34 @@
 }
 
 
-@model FinnyApp.Web.ViewModels.CreateSubUserViewModel;
-
-<form asp-action="Dashboard" asp-controller="User" method="post">
+@model FinnyApp.Web.ViewModels.DashboardViewModel;
+<h1>Create Sub User</h1>
+<form asp-action="CreateSubUser" asp-controller="User" method="post">
     <label>Name</label>
-    <input type="text" asp-for="Name" />
+    <input type="text" asp-for="CreateSubUser.Name" />
     <br />
     <label>PIN</label>
-    <input type="password" asp-for="PIN" />
-    <button type="submit">Sign In</button>
+    <input type="password" asp-for="CreateSubUser.PIN" />
+    <button type="submit">Create Sub User</button>
+</form>
+
+<br />
+
+<h1>Create Task</h1>
+<form asp-action="CreateSubUserTask" asp-controller="User" method="post">
+    <label>Title</label>
+    <input type="text" asp-for="CreateTask.Title" />
+    <br />
+    <label>Description</label>
+    <input type="text" asp-for="CreateTask.Description" />
+    <button type="submit">Create Task</button>
+</form>
+
+<br />
+
+<h1>Create Goal</h1>
+<form asp-action="CreateSubUserGoal" asp-controller="User" method="post">
+    <label>Title</label>
+    <input type="text" asp-for="CreateGoal.Title" />
+    <button type="submit">Create Goal</button>
 </form>
